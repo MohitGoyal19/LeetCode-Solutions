@@ -12,26 +12,15 @@
 
 -- Find the second highest salary from the Employee table. If there is no second highest salary, return null.
 
-IF EXISTS (
-	SELECT
-		[salary]
-	FROM
+WITH [Ranked_Salaries] AS (
+	SELECT 
+		[salary], 
+		DENSE_RANK () OVER (ORDER BY [salary] DESC) AS [rank]
+	FROM 
 		[employee]
-	GROUP BY [salary]
-	ORDER BY 
-		[salary] DESC
-	OFFSET 1 ROWS FETCH NEXT 1 ROW ONLY)
-	BEGIN
-		SELECT
-			[salary] AS [SecondHighestSalary]
-		FROM
-			[employee]
-		GROUP BY [salary]   
-		ORDER BY 
-			[SecondHighestSalary] DESC
-		OFFSET 1 ROWS FETCH NEXT 1 ROW ONLY
-	END
-ELSE
-	SELECT
-		NULL AS [SecondHighestSalary]
-	
+)
+
+SELECT 
+	MAX([salary]) AS [SecondHighestSalary]
+FROM [Ranked_Salaries]
+WHERE [rank] = 2
