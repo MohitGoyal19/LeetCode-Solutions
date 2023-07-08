@@ -20,7 +20,7 @@ Approach Used:
 
 Data Structures Used:
 	Integer
-	Boolean
+	String
 
 Solution:
 	Time Complexity: O(1)
